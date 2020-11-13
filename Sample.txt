@@ -1,0 +1,5 @@
+Denote n as the number of vertices
+Iterating i from 0 to n-1
+Run a depth-first search algorithm from the i-th vertex
+Denote k as the index of the vertex that has the largest depth
+Print k and exit

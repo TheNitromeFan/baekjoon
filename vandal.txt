@@ -1,0 +1,5 @@
+y = row
+x = col
+x + y = diag1 + 1
+x - y = diag2 - n
+-> x = (diag1 + diag2 - n + 1) / 2, y = (diag1 - diag2 + n + 1) / 2

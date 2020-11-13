@@ -1,0 +1,5 @@
+a	b	a xor b		a xor b xor b
+t	t	f		t
+t	f	t		t
+f	t	t		f
+f	f	f		f
