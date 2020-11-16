@@ -1,4 +1,5 @@
 import string
+import math
 
 
-print("X".isupper())
+print(math.gcd(-4, -6))
