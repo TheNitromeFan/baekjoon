@@ -1,5 +1,6 @@
 import string
 import math
+import itertools
 
 
-print(math.gcd(-4, -6))
+print(list(itertools.product("2345", repeat=4)))

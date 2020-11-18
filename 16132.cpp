@@ -1,24 +1,33 @@
 #include <cstdio>
+#include <cstring>
+
+long long dp[1300][60];
+
+long long sumi(int sum, int i){
+	if(sum < 0 || i < 0){
+		return 0;
+	}else if(sum == 0 && i == 0){
+		return 1;
+	}
+	if(dp[sum][i] != -1){
+		return dp[sum][i];
+	}
+	dp[sum][i] = sumi(sum, i - 1) + sumi(sum - i, i - 1);
+	return dp[sum][i];
+}
+
+long long part(int n){
+	int sum = n * (n + 1) / 2;
+	if(sum % 2 == 1){
+		return 0;
+	}
+	return sumi(sum / 2, n) / 2;
+}
 
 int main(){
 	int n;
 	scanf("%d", &n);
-	int cnt = 0;
-	for(int i = 0; i < (1 << (n - 1)); ++i){
-		int left = 0, right = 0;
-		int k = i;
-		for(int j = 1; j < n; ++j){
-			if(k % 2 == 0){
-				left += j;
-			}else{
-				right += j;
-			}
-			k /= 2;
-		}
-		if(left + n == right){
-			++cnt;
-		}
-	}
-	printf("%d", cnt);
+	memset(dp, -1, sizeof(dp));
+	printf("%lld", part(n));
 	return 0;
 }
