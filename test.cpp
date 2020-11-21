@@ -5,7 +5,6 @@
 using namespace std;
 
 int main(){
-	string s = "012345";
-	cout << s.substr(0, 1);
+	cout << string("92", 4);
 	return 0;
 }

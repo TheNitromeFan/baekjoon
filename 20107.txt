@@ -1,0 +1,16 @@
+pebble davinci
+halt
+davinci:
+get
+right
+move
+left
+pebble leonardo
+halt
+leonardo:
+get
+left
+move
+right
+pebble davinci
+halt

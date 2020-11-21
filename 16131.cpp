@@ -13,6 +13,7 @@ int main(){
 	if(abs(hong - cho) <= b){
 		++cnt;
 		++consec;
+		++maxConsec;
 	}
 	for(int i = 2; i <= m; ++i){
 		for(int j = 1; j <= n; ++j){
@@ -24,6 +25,12 @@ int main(){
 			room[j] -= x;
 			// printf("%d ", room[j]);
 		}
+		/*
+		int assign[1001];
+		for(int j = 1; j <= n; ++j){
+			assign[j] = j;
+		}
+		*/
 		// printf("%d %d\n", hong, cho);
 		for(int j = 1; j < n; ++j){
 			/*
@@ -55,10 +62,10 @@ int main(){
 			++cnt;
 			++consec;
 		}else{
-			if(consec > maxConsec){
-				maxConsec = consec;
-			}
 			consec = 0;
+		}
+		if(consec > maxConsec){
+			maxConsec = consec;
 		}
 	}
 	if(consec > maxConsec){

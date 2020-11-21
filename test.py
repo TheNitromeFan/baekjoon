@@ -1,6 +1,8 @@
 import string
 import math
 import itertools
+import decimal
 
 
-print(list(itertools.product("2345", repeat=4)))
+decimal.getcontext().prec = 50
+print(decimal.Decimal(math.acos(-1)))

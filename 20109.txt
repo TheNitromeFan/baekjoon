@@ -1,0 +1,33 @@
+start:
+pebble pickright
+right
+move
+left
+jump start
+pickright:
+get
+right
+move
+left
+put
+moveright:
+right
+move
+left
+pebble pickleft
+jump moveright
+pickleft:
+get
+left
+move
+right
+pebble end
+put
+moveleft:
+left
+move
+right
+pebble pickright
+jump moveleft
+end:
+halt

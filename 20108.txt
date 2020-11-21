@@ -1,0 +1,71 @@
+pebble a
+halt
+a:
+get
+right
+right
+move
+put
+left
+left
+move
+right
+move
+left
+pebble b
+left
+left
+move
+right
+move
+right
+jump c
+b:
+get
+right
+right
+move
+put
+left
+left
+move
+left
+move
+right
+pebble a
+right
+right
+move
+left
+left
+jump c
+c:
+pebble e
+move
+halt
+d:
+pebble f
+move
+halt
+e:
+get
+move
+put
+right
+right
+move
+left
+move
+left
+jump d
+f:
+get
+move
+put
+left
+left
+move
+right
+move
+right
+jump c
