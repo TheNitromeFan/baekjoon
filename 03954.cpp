@@ -1,136 +1,95 @@
-#include <cstdio>
-#include <algorithm>
-#include <cstring>
+// @EXPECTED_RESULTS@: CORRECT
+
 #include <stack>
-#define MEM_MAX 100000
-#define CODE_MAX 4096
-#define INPUT_MAX 4096
+#include <sstream>
+#include <iostream>
+#include <cstdio>
+#include <cstring>
 
-typedef struct Node{
-	int idx1;
-	int idx2;
-} node;
+using namespace std;
 
-using namespace std; 
+#define FOR(i,a,b) for (int i = (a); i < (b); i++)
 
-int t;
-int memory_num, code_num, input_num;
-char memory[MEM_MAX];
-char code[CODE_MAX];
-node bracket[CODE_MAX];
-char input[INPUT_MAX];
-stack<node> st;
-
-int main(){
-	scanf("%d", &t);
-	while(t--){
-		node tmp;
-		stack<node> stack;
-		int cnt = 0;
-		int ptr = 0;
-		int code_index = 0;
-		int input_index = 0;
-		int max_index = 0;
-		scanf("%d %d %d", &memory_num, &code_num, &input_num);
-		for(int i = 0; i < MEM_MAX; ++i){
-			memory[i] = 0;
+const int MAXP = 5000;
+const int MAXM = 101000;
+const int MAXRUN = 50000000;
+int bracketMatch[MAXP], tc, M, S, I;
+string input, prog;
+struct State{
+	unsigned char mem[MAXM];
+	int mid, iid, pid;
+	void doStep(){
+		switch(prog[pid]){
+		case '-':
+			--mem[mid];
+			break;
+		case '+':
+			++mem[mid];
+			break;
+		case '<':
+			if(--mid==-1)mid = M - 1;
+			break;
+		case '>':
+			if(++mid==M)mid = 0;
+			break;
+		case '.':
+// the following line will print the program output of the Brainfuck-program
+//			cout << (char)mem[mid];
+			break;
+		case ',':
+			if(iid == I)mem[mid] = 255;
+			else mem[mid] = input[iid++];
+			break;
+		case '[':
+			if(mem[mid]==0)pid = bracketMatch[pid];
+			break;
+		case ']':
+			if(mem[mid])pid = bracketMatch[pid];
+			break;
 		}
-		for(int i = 0; i < CODE_MAX; ++i){
-			bracket[i].idx1 = 0;
-			bracket[i].idx2 = 0;
-			code[i] = 0;
-			input[i] = 0;
-		}
-		scanf("%s %s", code, input);
-		for(int i = 0; i < code_num; ++i){
-			if(code[i] == '['){
-				bracket[i].idx1 = i;
-				tmp.idx1 = i;
-				stack.push(tmp);
-			}else if(code[i] == ']'){
-				tmp = stack.top();
-				stack.pop();
-				bracket[i].idx1 = tmp.idx1;
-				bracket[i].idx2 = i;
-				bracket[tmp.idx1].idx2 = i;
+		++pid;
+	}
+} state;
+
+int main() {
+	getline(cin,input);
+	{istringstream is(input); is >> tc;}
+	while(tc--){
+		getline(cin,input);
+		{istringstream is(input); is >> M >> S >> I;}
+		getline(cin, prog);
+		getline(cin, input);
+		state.iid = state.pid = state.mid = 0;
+		memset(state.mem,0,sizeof(state.mem));
+		// precalculation of brackets:
+		stack<int> brack;
+		FOR(i,0,S){
+			if(prog[i]=='['){
+				brack.push(i);
+			} else if(prog[i]==']'){
+				bracketMatch[i] = brack.top();
+				bracketMatch[brack.top()] = i;
+				brack.pop();
 			}
 		}
-		while(true){
-			switch(code[code_index]){
-				case '-':
-					memory[ptr] -= 1;
-					cnt++;
-					code_index++;
-					break;
-				case '+':
-					memory[ptr] += 1;
-					cnt++;
-					code_index++;
-					break;
-				case '<':
-					if(ptr == 0){
-						ptr = memory_num - 1;
-					}else{
-						ptr--;
-					}
-					cnt++;
-					code_index++;
-					break;
-				case '>':
-					if(ptr == memory_num - 1){
-						ptr = 0;
-					}else{
-						ptr++;
-					}
-					cnt++;
-					code_index++;
-					break;
-				case '[':
-					if(memory[ptr] == 0){
-						code_index = bracket[code_index].idx2;
-						cnt++;
-					}else{
-						cnt++;
-						code_index++;
-					}
-					break;
-				case ']':
-					if(memory[ptr] != 0){
-						code_index = bracket[code_index].idx1;
-						cnt++;
-					}else{
-						cnt++;
-						code_index++;
-					}
-					break;
-				case '.': 
-					cnt++; 
-					code_index++;
-					break;
-				case ',':
-					if(input_index == input_num){ 
-						memory[ptr] = 255;
-					}else{
-						memory[ptr] = input[input_index];
-						input_index++;
-					}
-					cnt++;
-					code_index++;
-					break;
+		// simulation:
+		int ST = 0;
+		while(ST <= MAXRUN && state.pid < S){
+			++ST;
+			state.doStep();
+		}
+		if(state.pid == S)cout << "Terminates\n";
+		else {
+			int maxpid = state.pid;
+			int minpid = state.pid;
+			// simulate again MAXRUN steps for calculation of the loop
+			while(ST--){
+				state.doStep();
+				maxpid = max(maxpid, state.pid);
+				minpid = min(minpid, state.pid);
 			}
-			if(code_index > max_index){
-				max_index = code_index;
-			}
-			if(code_index == code_num){
-				printf("Terminates\n");
-				break;
-			}
-			if(cnt > 50000000){
-				printf("Loops %d %d\n", bracket[max_index].idx1, bracket[max_index].idx2);
-				break;
-			}
+			cout << "Loops " << minpid - 1 << " " << maxpid << endl;
 		}
 	}
 	return 0;
 }
-

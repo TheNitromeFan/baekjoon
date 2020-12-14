@@ -57,7 +57,7 @@ int main(){
 	}
 	int ans = 0;
 	for(int i = 0; i < n; ++i){
-		for(int j = 0; j < n; ++j){
+		for(int j = 0; j < m; ++j){
 			if(map[i][j] == 'L'){
 				int cmp = bfs(n, m, i, j);
 				if(cmp > ans){
