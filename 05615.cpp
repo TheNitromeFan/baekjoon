@@ -1,61 +1,70 @@
-#include <cstdio>
+#include <iostream>
+#include <vector>
 
-long long a[12] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37};
+using namespace std;
 
-long long multiply(long long x, long long y, long long mod){
-	return (long long)((__int128)x * y % mod);
-}
+vector<long long> a = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43};
 
 long long power(long long base, long long exponent, long long mod){
-	base %= mod;
-	long long result = 1;
-	while(exponent > 0){
-		if(exponent % 2 == 1){
-			result = multiply(result, base, mod);
-		}
-		base = multiply(base, base, mod);
-		exponent /= 2;
+	if(exponent == 0){
+		return 1;
+	}else if(exponent % 2 == 0){
+		long long x = power(base, exponent / 2, mod);
+		return x * x % mod;
+	}else{
+		long long x = power(base, exponent / 2, mod);
+		return x * x % mod * base % mod;
 	}
-	return result;
 }
 
 bool miller_rabin(long long n, long long b){ // true for probable prime, false for composite
-	if(n % b == 0){
-		return false;
-	}
-	long long d = n-1;
-	while(d % 2 == 0){
-		if(power(b, d, n) == n-1){
+	long long d = n - 1;
+	while(true){
+		// cout << power(b, d, n) << '\n';
+		if(power(b, d, n) == n - 1){
 			return true;
+		}
+		if(d % 2 == 1){
+			break;
 		}
 		d /= 2;
 	}
-	long long tmp = power(b, d, n);
-	return tmp == n-1 || tmp == 1;
+	long long x = power(b, d, n);
+	return x == n - 1 || x == 1;
 }
 
-bool is_prime(long long n){
-	for(int i = 0; i < 12; ++i){
-		if(n == a[i]){
-			return true;
-		}else if(n > 40 && !miller_rabin(n, a[i])){
+bool is_prime(unsigned long long n){
+	if(n == 1){
+		return false;
+	}else if(n == 2){
+		return true;
+	}
+	for(int x : a){
+		if(x % n == 0){
+			continue;
+		}
+		if(!miller_rabin(n, x)){
+			// cout << n << ' ' << x << '\n';
 			return false;
 		}
 	}
-	return n > 40;
+	return true;
 }
 
 int main(){
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
 	int n;
-	scanf("%d", &n);
+	cin >> n;
 	int cnt = 0;
 	for(int i = 0; i < n; ++i){
-		long long z;
-		scanf("%lld", &z);
-		if(is_prime(2*z+1)){
+		unsigned long long z;
+		cin >> z;
+		if(is_prime(2 * z + 1)){
+			// cout << z << '\n';
 			++cnt;
 		}
 	}
-	printf("%d", cnt);
+	cout << cnt;
 	return 0;
 }
