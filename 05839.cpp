@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
-#define MAXN 1005
+#include <cstring>
+#define MAXN 100
 
 using namespace std;
 
@@ -9,31 +10,48 @@ int main(){
 	cin.tie(NULL);
 	int n;
 	cin >> n;
-	int cows[MAXN] = {};
+	vector<int> pos(n + 1);
 	for(int i = 1; i <= n; ++i){
-		cin >> cows[i];
+		cin >> pos[i];
 	}
-	++n;
-	sort(cows + 1, cows + n + 1);
+	pos.push_back(0);
+	sort(pos.begin() + 1, pos.begin() + n + 1);
 	int best[MAXN][MAXN][2];
 	memset(best, -1, sizeof(best));
 	for(int i = 1; i <= n; ++i){
-		if(cows[i] == 0){
+		if(pos[i] == 0){
 			best[i][1][0] = 0;
 		}
 	}
 	for(int len = 1; len < n; ++len){
+		int ccount = n - len;
 		for(int i = 1; i + len <= n + 1; ++i){
-			best[i - 1][len + 1][0]
-			= min(best[i - 1][len + 1][0], best[i][len][0] + (n - len) * (cows[i] - cows[i - 1]));
-			best[i - 1][len + 1][0]
-			= min(best[i - 1][len + 1][0], best[i][len][1] + (n - len) * (cows[i + len - 1] - cows[i - 1]));
-			best[i][len + 1][1]
-			= min(best[i][len + 1][1], best[i][len][0] + (n - len) * (cows[i + len] - cows[i]));
-			best[i][len + 1][1]
-			= min(best[i][len + 1][1], best[i][len][1] + (n - len) * (cows[i + len] - cows[i + len - 1]));
+			if(best[i][len][0] != -1 && (best[i - 1][len + 1][0] == -1
+			|| best[i - 1][len + 1][0] > best[i][len][0] + ccount * (pos[i] - pos[i - 1]))){
+				best[i - 1][len + 1][0] = best[i][len][0] + ccount * (pos[i] - pos[i - 1]);
+			}
+			if(best[i][len][1] != -1 && (best[i - 1][len + 1][0] == -1
+			|| best[i - 1][len + 1][0] > best[i][len][1] + ccount * (pos[i + len - 1] - pos[i - 1]))){
+				best[i - 1][len + 1][0] = best[i][len][1] + ccount * (pos[i + len - 1] - pos[i - 1]);
+			}
+			if(best[i][len][0] != -1 && (best[i][len + 1][1] == -1
+			|| best[i][len + 1][1] > best[i][len][0] + ccount * (pos[i + len] - pos[i]))){
+				best[i][len + 1][1] = best[i][len][0] + ccount * (pos[i + len] - pos[i]);
+			}
+			if(best[i][len][1] != -1 && (best[i][len + 1][1] == -1
+			|| best[i][len + 1][1] > best[i][len][1] + ccount * (pos[i + len] - pos[i + len - 1]))){
+				best[i][len + 1][1] = best[i][len][1] + ccount * (pos[i + len] - pos[i + len - 1]);
+			}
 		}
 	}
-	cout << min(best[1][n][0], best[1][n][1]);
+	int ans;
+	if(best[1][n][0] == -1){
+		ans = best[1][n][1];
+	}else if(best[1][n][1] == -1){
+		ans = best[1][n][0];
+	}else{
+		ans = min(best[1][n][0], best[1][n][1]);
+	}
+	cout << ans;
 	return 0;
 }
