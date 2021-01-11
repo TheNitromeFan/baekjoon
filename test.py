@@ -3,4 +3,4 @@ import math
 import itertools
 
 
-print(5 % -4)
+print({3, 2, 4}.pop())
