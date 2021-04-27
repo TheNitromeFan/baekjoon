@@ -12,7 +12,7 @@ def main():
             prod *= pi
             y = (b + 1) * (1 - prod) + b - 2 * d + a + 1
             strokes = min(strokes, y)
-        sys.stdout.write("Case #{0}: {1:.6f}".format(a0, strokes))
+        sys.stdout.write("Case #{0}: {1:.6f}\n".format(a0, strokes))
 
 
 main()

@@ -3,18 +3,18 @@
 
 using namespace std;
 
-int servings(vector<int> &wine, int n, int size){
-	int ret = 0;
+long long servings(vector<long long> &wine, int n, int size){
+	long long ret = 0;
 	for(int i = 0; i < n; ++i){
 		ret += wine[i] / size;
 	}
 	return ret;
 }
 
-int serve(vector<int> &wine, int n, int k){
-	int low = 1, high = 1000000000;
+long long serve(vector<long long> &wine, int n, int k){
+	long long low = 1, high = 1LL << 32;
 	while(low < high){
-		int mid = (low + high) / 2;
+		long long mid = (low + high) / 2;
 		if(servings(wine, n, mid) >= k){
 			low = mid + 1;
 		}else{
@@ -29,7 +29,7 @@ int main(){
 	cin.tie(NULL);
 	int n, k;
 	cin >> n >> k;
-	vector<int> wine(n);
+	vector<long long> wine(n);
 	for(int i = 0; i < n; ++i){
 		cin >> wine[i];
 	}

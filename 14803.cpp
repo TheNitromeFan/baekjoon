@@ -10,7 +10,7 @@ int main(){
 		for(int i = 0; i < n; ++i){
 			int ki, si;
 			scanf("%d %d", &ki, &si);
-			double limitSpeed = (double)d / (d - ki) * si;
+			double limitSpeed = (long long)d * si / (double)(d - ki);
 			if(maxSpeed > limitSpeed){
 				maxSpeed = limitSpeed;
 			}

@@ -1,4 +1,5 @@
 import sys
+import decimal
 
 
 def main():
@@ -6,11 +7,12 @@ def main():
     for a0 in range(1, t + 1):
         n, x, k, a, b, c = (int(z) for z in sys.stdin.readline().split())
         i = 0
-        ans = 0
+        ans = decimal.Decimal(0)
         while x or k:
             xk, kk = x % 2, k % 2
-            t = {(0, 0): 0, (0, 1): (b + c) / 100, (1, 0): (b + c) / 100, (1, 1): (a + b) / 100}
-            p = xk
+            t = {(0, 0): decimal.Decimal(0), (0, 1): decimal.Decimal(b + c) / 100,
+                 (1, 0): decimal.Decimal(b + c) / 100, (1, 1): decimal.Decimal(a + b) / 100}
+            p = decimal.Decimal(xk)
             for _ in range(n):
                 p = p * t[(1, kk)] + (1 - p) * t[(0, kk)]
             # print(xk, kk, p)
