@@ -44,6 +44,7 @@ void dijkstra(vector<pair<int, int>> adj[501], vector<pair<int, int>> trace[501]
 void erase_paths(vector<pair<int, int>> adj[501], vector<pair<int, int>> trace[501], int dest){
 	queue<int> q;
 	q.push(dest);
+	bool visited[501] = {};
 	while(!q.empty()){
 		int v = q.front();
 		q.pop();
@@ -54,7 +55,10 @@ void erase_paths(vector<pair<int, int>> adj[501], vector<pair<int, int>> trace[5
 					edge.second = -1;
 				}
 			}
-			q.push(u);
+			if(!visited[u]){
+				q.push(u);
+				visited[u] = true;
+			}
 		}
 	}
 }

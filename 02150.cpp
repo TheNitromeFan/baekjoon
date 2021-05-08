@@ -1,68 +1,67 @@
-#include <cstdio>
+#include <iostream>
 #include <vector>
-#include <stack>
 #include <algorithm>
 
 using namespace std;
 
-bool visited[10001], assigned[10001];
-stack<int> s;
-vector<vector<int>> adj, rev_adj, scc;
-
-void visit(int u){
-	if(!visited[u]){
-		visited[u] = true;
-		for(int v : adj[u]){
-			visit(v);
-		}
-		s.push(u);
+void traverse(vector<int> &post_order, vector<vector<int>> &adj, vector<bool> &visited, int a){
+	if(visited[a]){
+		return;
 	}
+	visited[a] = true;
+	for(int b : adj[a]){
+		traverse(post_order, adj, visited, b);
+	}
+	post_order.push_back(a);
 }
 
-void assign(int u){
-	if(!assigned[u]){
-		assigned[u] = true;
-		scc[scc.size()-1].push_back(u);
-		for(int v : rev_adj[u]){
-			assign(v);
-		}
+void assign(vector<vector<int>> &rev, vector<int> &assigned, vector<int> &scc, int b, int root){
+	if(assigned[b] != -1){
+		return;
+	}
+	// cout << b << ' ' << root << '\n';
+	scc.push_back(b);
+	assigned[b] = root;
+	for(int a : rev[b]){
+		assign(rev, assigned, scc, a, root);
 	}
 }
 
 int main(){
-	int n, m;
-	scanf("%d %d", &n, &m);
-	adj.resize(n+1);
-	rev_adj.resize(n+1);
-	for(int i = 0; i < m; ++i){
-		int u, v;
-		scanf("%d %d", &u, &v);
-		adj[u].push_back(v);
-		rev_adj[v].push_back(u);
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	int v, e;
+	cin >> v >> e;
+	vector<vector<int>> adj(v + 1), rev(v + 1);
+	for(int i = 0; i < e; ++i){
+		int a, b;
+		cin >> a >> b;
+		adj[a].push_back(b);
+		rev[b].push_back(a);
 	}
-	for(int u = 1; u <= n; ++u){
-		visit(u);
+	vector<bool> visited(v + 1);
+	vector<int> post_order;
+	for(int a = 1; a <= v; ++a){
+		traverse(post_order, adj, visited, a);
 	}
-	int components = 0;
-	while(!s.empty()){
-		int u = s.top();
-		s.pop();
-		if(!assigned[u]){
-			vector<int> tmp;
-			scc.push_back(tmp);
+	reverse(post_order.begin(), post_order.end());
+	vector<int> assigned(v + 1, -1);
+	vector<vector<int>> sccs;
+	for(int b : post_order){
+		if(assigned[b] == -1){
+			vector<int> scc;
+			assign(rev, assigned, scc, b, b);
+			sort(scc.begin(), scc.end());
+			sccs.push_back(scc);
 		}
-		assign(u);
 	}
-	for(int i = 0; i < scc.size(); ++i){
-		sort(scc[i].begin(), scc[i].end());
-	}
-	sort(scc.begin(), scc.end());
-	printf("%d\n", scc.size());
-	for(int i = 0; i < scc.size(); ++i){
-		for(int j = 0; j < scc[i].size(); ++j){
-			printf("%d ", scc[i][j]);
+	sort(sccs.begin(), sccs.end());
+	cout << sccs.size() << '\n';
+	for(vector<int> &scc : sccs){
+		for(int u : scc){
+			cout << u << ' ';
 		}
-		printf("-1\n");
+		cout << -1 << '\n';
 	}
 	return 0;
 }

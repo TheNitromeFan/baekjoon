@@ -3,4 +3,4 @@ import math
 import itertools
 
 
-print({3, 2, 4}.pop())
+print(1 in (1, 2, 3))

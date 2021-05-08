@@ -5,6 +5,9 @@
 using namespace std;
 
 int main(){
-	cout << string("92", 4);
+	int i = 10;
+	int j, k;
+	j = k = i++;
+	cout << j << ' ' << k;
 	return 0;
 }
