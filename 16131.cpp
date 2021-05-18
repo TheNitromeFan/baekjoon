@@ -7,58 +7,41 @@ using std::swap;
 int main(){
 	int n, a, b, m;
 	scanf("%d %d %d %d", &n, &a, &b, &m);
-	int room[1001];
+	int numberToRoom[1001], roomToNumber[1001];
+	for(int j = 1; j <= n; ++j){
+		numberToRoom[j] = j;
+		roomToNumber[j] = j;
+	}
 	int cnt = 0, maxConsec = 0, consec = 0;
-	int hong = 1, cho = a;
-	if(abs(hong - cho) <= b){
+	if(abs(numberToRoom[1] - numberToRoom[a]) <= b){
 		++cnt;
 		++consec;
-		++maxConsec;
 	}
+	int points[1001] = {};
 	for(int i = 2; i <= m; ++i){
 		for(int j = 1; j <= n; ++j){
-			scanf("%d", &room[j]);
+			scanf("%d", &points[j]);
 		}
 		for(int j = 1; j <= n; ++j){
 			int x;
 			scanf("%d", &x);
-			room[j] -= x;
-			// printf("%d ", room[j]);
+			points[j] -= x;
 		}
-		/*
-		int assign[1001];
-		for(int j = 1; j <= n; ++j){
-			assign[j] = j;
-		}
-		*/
-		// printf("%d %d\n", hong, cho);
 		for(int j = 1; j < n; ++j){
-			/*
-			for(int k = 1; k <= n; ++k){
-				printf("%d ", room[k]);
-			}
-			printf("\n");
-			*/
-			if((room[j] >= 0 && room[j + 1] >= 0 && room[j + 1] >= room[j] + 2)
-			|| (room[j] < 0 && room[j + 1] >= 0)
-			|| (room[j] < 0 && room[j + 1] < 0 && room[j + 1] >= room[j] + 4)){
-				swap(room[j], room[j + 1]);
-				room[j] -= 2;
-				room[j + 1] += 2;
-				if(hong == j){
-					hong = j + 1;
-				}else if(hong == j + 1){
-					hong = j;
-				}
-				if(cho == j){
-					cho = j + 1;
-				}else if(cho == j + 1){
-					cho = j;
-				}
+			int x = roomToNumber[j], y = roomToNumber[j + 1];
+			if((points[x] >= 0 && points[y] >= 0 && points[y] >= points[x] + 2)
+			|| (points[x] < 0 && points[y] >= 0)
+			|| (points[x] < 0 && points[y] < 0 && points[y] >= points[x] + 4)){
+				roomToNumber[j] = y;
+				roomToNumber[j + 1] = x;
+				numberToRoom[y] = j;
+				numberToRoom[x] = j + 1;
+				points[y] -= 2;
+				points[x] += 2;
 			}
 		}
 		// printf("%d %d\n", hong, cho);
-		if(abs(hong - cho) <= b){
+		if(abs(numberToRoom[1] - numberToRoom[a]) <= b){
 			++cnt;
 			++consec;
 		}else{

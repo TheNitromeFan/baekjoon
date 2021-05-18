@@ -3,4 +3,4 @@ import math
 import itertools
 
 
-print(1 in (1, 2, 3))
+print(-2 ** 4)
