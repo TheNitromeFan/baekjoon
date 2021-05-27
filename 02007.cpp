@@ -53,15 +53,15 @@ int main(){
 	for(int i = 0; i < n * (n - 1) / 2; ++i){
 		cin >> sums[i];
 	}
+	sort(sums.begin(), sums.end());
 	if(n == 2){
-		if((sums[0] & 1) != 0){
-			cout << "Impossible";
+		if(sums[0] >= 0){
+			cout << 0 << ' ' << sums[0];
 		}else{
-			cout << sums[0] / 2 << ' ' << sums[0] / 2;
+			cout << sums[0] << ' ' << 0;
 		}
 		return 0;
 	}
-	sort(sums.begin(), sums.end());
 	vector<long long> ans(n);
 	for(int pos = 2; pos < n * (n - 1) / 2; ++pos){
 		if(simulate(sums, n, pos, ans)){

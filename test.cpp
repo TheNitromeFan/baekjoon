@@ -1,35 +1,26 @@
-#include <iostream>
-#include <limits>
-#include <string>
+#include<bits/stdc++.h>
 
-using namespace std;
-
-
-
-void extended_gcd(long long a, long long b, long long &x, long long &y, long long &g){
-	long long r, r1, r2, a1, a2, b1, b2, q;
-	a1 = b2 = 1;
-	a2 = b1 = 0;
-	while (b > 0){
-		q = a / b;
-		r = a % b;
-		r1 = a1 - q*b1;
-		r2 = a2 - q*b2;
-		a = b;
-		a1 = b1;
-		a2 = b2;
-		b = r;
-		b1 = r1;
-		b2 = r2;
-	}
-	x = a1;
-	y = a2;
-	g = a;
+int main()
+{
+    using namespace std;
+    int a = 6164, b = 25532;
+    int sx = 0, sy = 0;
+    printf("%d %d\n", (a+1)/2+b, a+b);
+    for(int i=0 ; i<a/2; i++)
+    {
+        sx+=2, sy+=2;
+        printf("%d %d\n", sx, sy);
+    }
+    if(a%2)
+    {
+        sx+=1, sy+=1;
+        printf("%d %d\n", sx, sy);
+    }
+    for(int i=0; i<b; i++)
+    {
+        sx+=2, sy+=1;
+        printf("%d %d\n", sx , sy);
+    }
+    return 0;
 }
 
-int main(){
-	long long x, y, g;
-	extended_gcd(7, 3, x, y, g);
-	cout << x << ' ' << y << ' ' << g;
-	return 0;
-}

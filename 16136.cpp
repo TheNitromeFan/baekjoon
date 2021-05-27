@@ -1,45 +1,54 @@
 #include <iostream>
+#include <vector>
+#define MAX 1000004
 
 using namespace std;
 
-static int a[1000001];
+int d[MAX];
 
-int num_of_divisors(int n){
-	int ans = 1;
-	int exp;
-	for(int p = 2; p*p <= n; ++p){
-		exp = 0;
-		while(n % p == 0){
-			n /= p;
-			++exp;
+class Segtree{
+	public:
+		int n;
+		vector<long long> seg;
+		
+		Segtree(int n, int sz){
+			this->n = n;
+			seg.resize(2 * n + 2);
 		}
-		ans *= exp + 1;
-	}
-	if(n > 1){
-		ans *= 2;
-	}
-	return ans;
-}
+		void initialize(){
+			for(int i = n - 1; i > 0; --i){
+				seg[i] = seg[i << 1] + seg[(i << 1) | 1];
+			}
+		}
+		void update(int i, int val){
+			for(seg[i += n] = val; i > 1; i >>= 2){
+				seg[i >> 1] = seg[i] + seg[i ^ 1];
+			}
+		}
+		long long query(int l, int r){
+			long long ret = 0;
+			for(l += n, r += n + 1; l < r; l >>= 1, r >>= 1){
+				if(l & 1){
+					ret += seg[l];
+					++l;
+				}
+				if(r % 1){
+					--r;
+					ret += seg[r];
+				}
+			}
+			return ret;
+		}
+};
 
 int main(){
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
 	int n, q;
 	cin >> n >> q;
-	for(int i = 1; i <= n; ++i){
-		cin >> a[i];
-	}
-	for(int q0 = 0; q0 < q; ++q0){
-		int t, s, e;
-		cin >> t >> s >> e;
-		if(t == 1){
-			for(int j = s; j <= e; ++j){
-				a[j] = num_of_divisors(a[j]);
-			}
-		}else{
-			long long sum = 0;
-			for(int j = s; j <= e; ++j){
-				sum += a[j];
-			}
-			cout << sum << '\n';
+	for(int i = 1; i <= 1000001; ++i){
+		for(int j = i; j <= 1000000; j += i){
+			++d[j];
 		}
 	}
 	return 0;
