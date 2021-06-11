@@ -1,26 +1,35 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <vector>
+#include <utility>
+#include <algorithm>
 
-int main()
-{
-    using namespace std;
-    int a = 6164, b = 25532;
-    int sx = 0, sy = 0;
-    printf("%d %d\n", (a+1)/2+b, a+b);
-    for(int i=0 ; i<a/2; i++)
-    {
-        sx+=2, sy+=2;
-        printf("%d %d\n", sx, sy);
-    }
-    if(a%2)
-    {
-        sx+=1, sy+=1;
-        printf("%d %d\n", sx, sy);
-    }
-    for(int i=0; i<b; i++)
-    {
-        sx+=2, sy+=1;
-        printf("%d %d\n", sx , sy);
-    }
-    return 0;
+using namespace std;
+
+unsigned find_index(vector<int> &vec, int val){
+	unsigned low = 0, high = vec.size() - 1;
+	while(low < high){
+		unsigned mid = (low + high) / 2;
+		if(vec[mid] >= val){
+			high = mid;
+		}else{
+			low = mid + 1;
+		}
+	}
+	return low;
 }
 
+int rand_num(){
+	return rand() % 2;
+}
+
+int main(){
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	srand(time(NULL));
+	for(int i = 0; i < 10; ++i){
+		cout << rand_num() << ' ';
+	}
+	return 0;
+}
