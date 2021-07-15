@@ -16,11 +16,16 @@ class Compare{
 
 void dijkstra(vector<pair<int, int>> edges[100001], int dist[1001], int prev[1001], int start){
 	priority_queue<pair<int, int>, vector<pair<int, int>>, Compare> pq;
+	bool visited[1001] = {};
 	pq.push(make_pair(start, 0));
 	while(!pq.empty()){
 		pair<int, int> p = pq.top();
 		pq.pop();
 		int u = p.first, du = p.second;
+		if(visited[u]){
+			continue;
+		}
+		visited[u] = true;
 		for(pair<int, int> edge: edges[u]){
 			int v = edge.first, w = edge.second;
 			if(du + w < dist[v]){

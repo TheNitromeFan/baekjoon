@@ -1,57 +1,54 @@
 #include <iostream>
-#include <algorithm>
-#include <cstring>
-#define MAXN 100
+#include <vector>
+#include <utility>
 
 using namespace std;
 
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	int n;
-	cin >> n;
-	vector<int> pos(n + 1);
-	for(int i = 1; i <= n; ++i){
-		cin >> pos[i];
-	}
-	pos.push_back(0);
-	sort(pos.begin() + 1, pos.begin() + n + 1);
-	int best[MAXN][MAXN][2];
-	memset(best, -1, sizeof(best));
-	for(int i = 1; i <= n; ++i){
-		if(pos[i] == 0){
-			best[i][1][0] = 0;
+	int n, m;
+	cin >> n >> m;
+	vector<pair<int, int>> a(n), b(m);
+	for(int i = 0; i < n; ++i){
+		cin >> a[i].first >> a[i].second;
+		if(i > 0){
+			a[i].second += a[i - 1].second;
 		}
 	}
-	for(int len = 1; len < n; ++len){
-		int ccount = n - len;
-		for(int i = 1; i + len <= n + 1; ++i){
-			if(best[i][len][0] != -1 && (best[i - 1][len + 1][0] == -1
-			|| best[i - 1][len + 1][0] > best[i][len][0] + ccount * (pos[i] - pos[i - 1]))){
-				best[i - 1][len + 1][0] = best[i][len][0] + ccount * (pos[i] - pos[i - 1]);
-			}
-			if(best[i][len][1] != -1 && (best[i - 1][len + 1][0] == -1
-			|| best[i - 1][len + 1][0] > best[i][len][1] + ccount * (pos[i + len - 1] - pos[i - 1]))){
-				best[i - 1][len + 1][0] = best[i][len][1] + ccount * (pos[i + len - 1] - pos[i - 1]);
-			}
-			if(best[i][len][0] != -1 && (best[i][len + 1][1] == -1
-			|| best[i][len + 1][1] > best[i][len][0] + ccount * (pos[i + len] - pos[i]))){
-				best[i][len + 1][1] = best[i][len][0] + ccount * (pos[i + len] - pos[i]);
-			}
-			if(best[i][len][1] != -1 && (best[i][len + 1][1] == -1
-			|| best[i][len + 1][1] > best[i][len][1] + ccount * (pos[i + len] - pos[i + len - 1]))){
-				best[i][len + 1][1] = best[i][len][1] + ccount * (pos[i + len] - pos[i + len - 1]);
-			}
+	for(int j = 0; j < m; ++j){
+		cin >> b[j].first >> b[j].second;
+		if(j > 0){
+			b[j].second += b[j - 1].second;
 		}
 	}
-	int ans;
-	if(best[1][n][0] == -1){
-		ans = best[1][n][1];
-	}else if(best[1][n][1] == -1){
-		ans = best[1][n][0];
-	}else{
-		ans = min(best[1][n][0], best[1][n][1]);
+	int time = 0;
+	int i = 0, j = 0;
+	int x = 0, y = 0;
+	int lead = 0;
+	int cnt = 0;
+	while(i < n && j < m){
+		++time;
+		x += a[i].first;
+		y += b[j].first;
+		if(x > y){
+			if(lead == 2){
+				++cnt;
+			}
+			lead = 1;
+		}else if(x < y){
+			if(lead == 1){
+				++cnt;
+			}
+			lead = 2;
+		}
+		if(time == a[i].second){
+			++i;
+		}
+		if(time == b[j].second){
+			++j;
+		}
 	}
-	cout << ans;
+	cout << cnt << '\n';
 	return 0;
 }

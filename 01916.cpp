@@ -18,10 +18,15 @@ int dist[20001]; // dist[v]: distance from start to v
 void dijkstra(int start){
 	priority_queue<pair<int, int>> pq;
 	pq.push({0, start});
+	bool visited[20001] = {};
 	while(!pq.empty()){
 		pair<int, int> tmp = pq.top();
 		pq.pop();
 		int v = tmp.second;
+		if(visited[v]){
+			continue;
+		}
+		visited[v] = true;
 		for(unsigned k = 0; k < edges[v].size(); ++k){
 			int cmp = dist[v] + edges[v][k].val;
 			if(cmp < dist[edges[v][k].end]){

@@ -3,7 +3,9 @@
 using namespace std;
 
 int main(){
-	int board[101][101] = {};
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	int board[1002][1002] = {};
 	int n;
 	cin >> n;
 	for(int paper = 1; paper <= n; ++paper){
@@ -16,13 +18,13 @@ int main(){
 		}
 	}
 	int cnt[101] = {};
-	for(int i = 0; i < 101; ++i){
-		for(int j = 0; j < 101; ++j){
+	for(int i = 0; i < 1002; ++i){
+		for(int j = 0; j < 1002; ++j){
 			++cnt[board[i][j]];
 		}
 	}
 	for(int c = 1; c <= n; ++c){
-		printf("%d\n", cnt[c]);
+		cout << cnt[c] << '\n';
 	}
 	return 0;
 }

@@ -1,4 +1,4 @@
 import math
 
 
-print(math.factorial(10000) ** 1000)
+print("a320802398".upper())

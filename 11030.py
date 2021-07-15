@@ -20,6 +20,15 @@ def expmod(base, e, mod):
         return x * x * base % mod
 
 
+def zero_pad(a, b):
+    x = a
+    for _ in range(1, b):
+        x = a ** x
+        if x >= 10 ** 8:
+            return True
+    return False
+
+
 def main():
     a, b = (int(x) for x in input().split())
     if b == 0:
@@ -44,7 +53,10 @@ def main():
     else:
         for i in range(1, b):
             a2 = expmod(a % 5 ** 8, a2 % (4 * 5 ** 7), 10 ** 8)
-    print((a1 * 33 * 5 ** 8 + a2 * (-50354) * 2 ** 8) % 10 ** 8)
+    if zero_pad(a, b):
+        print(str((a1 * 33 * 5 ** 8 + a2 * (-50354) * 2 ** 8) % 10 ** 8).zfill(8))
+    else:
+        print(str((a1 * 33 * 5 ** 8 + a2 * (-50354) * 2 ** 8) % 10 ** 8))
 
 
 main()
